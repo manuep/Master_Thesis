@@ -1,4 +1,4 @@
-//This charging strategy has been largely modified by Manuel Pérez (manperbra@outlook.es) to satisfy the decentralized control local pricing charging strategy
+//This charging strategy has been largely modified by Manuel PÃ©rez (manperbra@outlook.es) to satisfy the decentralized control local pricing charging strategy
 // proposed in his master thesis (see Readme file)
 
 package Utils.Charging.Strategies;
@@ -76,7 +76,7 @@ public class LP extends ChargingStrategy {
 			writer3= new BufferedWriter(new FileWriter("directory\\satisfaction.txt",true));
 			writer3.newLine();
 			writer3.append(String.format("%02d", GlobalClock.getTime()[2])+"/01/2020 "+String.format("%02d", GlobalClock.getTime()[0])+":"+String.format("%02d", GlobalClock.getTime()[1])+";");
-			writer3.append(getAgent().getAgentId()+";"+station.getID()+";"+getAgent().getCar().getCurrentEnergy()+";"+getAgent().getCar().getMaxEnergy()+";"+getsatisfaction(station,getAgent())[0]+";"+getsatisfaction(station,getAgent())[1]+";"+getsatisfaction(station,getAgent())[2]+";"+getsatisfaction(station,getAgent())[3]+";"+getsatisfaction(station,getAgent())[4]+";"+getsatisfaction(station,getAgent())[5]);
+			writer3.append(getAgent().getAgentId()+";"+station.getID()+";"+getAgent().getCar().getCurrentEnergy()+";"+getAgent().getCar().getMaxEnergy()+";"+getsatisfaction(station,getAgent())[2]+";"+getsatisfaction(station,getAgent())[3]);
 			writer3.close();
 		}
 		catch (IOException e) {
