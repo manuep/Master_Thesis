@@ -38,11 +38,7 @@ public class World {
 		int days = Integer.parseInt(in.nextLine());
 		GlobalClock.getInstance().setSimulationDays(days);
 		Variables.SIMULATION_DAYS = days;
-		
-		System.out.println("Number of hours :");
-		int hours = Integer.parseInt(in.nextLine());
-		GlobalClock.getInstance().setSimulationHours(hours);
-		Variables.SIMULATION_HOURS = hours;
+		Variables.SIMULATION_HOURS = days*24;
 		
 		System.out.println("Charging Strategy? 1=C, 2=D, 3=LP");
 		int strat=Integer.parseInt(in.nextLine());
