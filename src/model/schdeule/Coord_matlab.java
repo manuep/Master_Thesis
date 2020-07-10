@@ -1,4 +1,4 @@
-//This function to coordinate the JAVA code with the Matlab engine was fully introduced by Manuel Pérez (manperbra@outlook.es)
+//This function to coordinate the JAVA code with the Matlab engine was fully introduced by Manuel PÃ©rez (manperbra@outlook.es)
 
 package model.schdeule;
 
@@ -76,13 +76,13 @@ public class Coord_matlab {
 		StringWriter output = new StringWriter();
 		StringWriter output1 = new StringWriter();
 		StringWriter output2 = new StringWriter();
-		matEng.eval("cd 'C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer'", null, null);
+		matEng.eval("cd 'directory'", null, null);
 		matEng.eval("loadbuses",null,null);
-		matEng.eval("Steinkjer=SteinkjerModified",null,null);
+		matEng.eval("Steinkjer=mpc_case_file",null,null);
 		matEng.eval("Steinkjer.gencost(1,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
 		matEng.eval("Steinkjer.gencost(2,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
-		matEng.eval("Steinkjer.bus(1:974,3)=Pd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
-		matEng.eval("Steinkjer.bus(1:974,4)=Qd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
+		matEng.eval("Steinkjer.bus(1:n_buses,3)=Pd(1:n_buses,"+(time_step)+")",null,null);
+		matEng.eval("Steinkjer.bus(1:n_buses,4)=Qd(1:n_buses,"+(time_step)+")",null,null);
 		List <ChargingStation> cstations =(ChargingStationMap.getChargingStations());
 		for (int i=0;i<cstations.size();i++) {
 			if(cstations.get(i).getConnection()>0) {
