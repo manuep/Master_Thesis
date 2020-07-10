@@ -23,7 +23,7 @@ import model.schdeule.GlobalClock;
 
 public final class Variables {
 	
-	// Significant changes introduced by Manuel Pérez (manperbra@outlook.es) on the public variables
+	// Significant changes introduced by Manuel PÃ©rez (manperbra@outlook.es) on the public variables
 	public static double losses_real= 0;
 	public static double losses_imag=0;
 	public static double[] voltage_magnitudes= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
@@ -49,7 +49,7 @@ public final class Variables {
 	public static int PEAK_LIMIT = Integer.MAX_VALUE;
 	public static int AGENT_PRINT_LIMIT = 100;
 	
-	public static final String PATH = "C:/Users/manpe/eclipse-workspace/ABM-Steinkjer_random";
+	public static final String PATH = "directory";
 	public static final String LOCAL_CHARGING_STATIONS_JSON_DIR=PATH+"/src/res/steinkjer.json";
 
 	public static final String LOCAL_GDIR_JSON_ROUTES_DIR = PATH+"/src/res/routes-sondre.json";
