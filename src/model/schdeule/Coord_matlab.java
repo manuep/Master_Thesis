@@ -77,7 +77,7 @@ public class Coord_matlab {
 		StringWriter output1 = new StringWriter();
 		StringWriter output2 = new StringWriter();
 		matEng.eval("cd 'directory'", null, null);
-		matEng.eval("loadbuses",null,null);
+		matEng.eval("buses_consumption_data",null,null);
 		matEng.eval("Steinkjer=mpc_case_file",null,null);
 		matEng.eval("Steinkjer.gencost(1,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
 		matEng.eval("Steinkjer.gencost(2,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
