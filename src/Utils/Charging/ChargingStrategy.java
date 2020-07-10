@@ -19,8 +19,7 @@ public abstract class ChargingStrategy {
 	public ChargingStrategy(Agent agent) {
 		this.charging = false;
 		this.agent = agent;
-		this.homeChargingStation = new ChargingStation(1,16,230); //ChargingStation(int openChargingPoints, int amp, int voltage)
-		//System.out.println("Made an home charging station for Agent ("+agent+") -> id: "+agent.getAgentId());
+		this.homeChargingStation = new ChargingStation(1,16,230); 
 		this.homeChargingStation.setAddress("Home charging station for Agent ("+getAgent().getAgentId()+")");
 		this.homeChargingStation.setID(0);
 		PowerGrid.getInstance().addToChargingStationMap(homeChargingStation);

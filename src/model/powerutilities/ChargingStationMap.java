@@ -101,22 +101,6 @@ public class ChargingStationMap {
 		return sorted_map;
 	}
 	
-	//Edited by @ManuelPerez
-//	public static TreeMap<Double, ChargingStation> pricelist(List<ChargingStation> chargingStations) {
-//		HashMap<Double, ChargingStation> PriceMap = new HashMap<Double, ChargingStation>();
-//		
-//		ValueComparator pvc =  new ValueComparator(PriceMap);
-//		TreeMap<Double, ChargingStation> sorted_map = new TreeMap<Double, ChargingStation>(pvc);
-//
-//		for (ChargingStation station:chargingStations) {
-//			PriceMap.put(station.getPriceCurrent());
-//		}
-//		
-//		sorted_map.putAll(PriceMap);
-//
-//		return sorted_map;
-//	}
-	
 
 
 	public synchronized void updateAverageInformation() {
@@ -190,6 +174,8 @@ public class ChargingStationMap {
 	}
 
 
+	//Some minor changes were introduced by Manuel Pérez (manperbra@outlook.es) in the getters and setters part of the code
+	
 	/////////////////////////
 	// GETTERS AND SETTERS
 	////////////////////////

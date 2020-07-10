@@ -23,9 +23,7 @@ import model.schdeule.GlobalClock;
 
 public final class Variables {
 	
-	public static int[] cartypes = {1,3,1,1,3,1,2,3,3,3,3,2,2,3,3,2,2,2,2,3};
-	public static int[] minenergy= {11,5,9,18,17,14,76,11,6,16,13,33,36,17,19,61,46,33,72,9};	
-	
+	// Significant changes introduced by Manuel Pérez (manperbra@outlook.es) on the public variables
 	public static double losses_real= 0;
 	public static double losses_imag=0;
 	public static double[] voltage_magnitudes= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
@@ -42,16 +40,13 @@ public final class Variables {
 	public static final int MAX_DISTANCE_TO_CHARGING_STATION_AT_WORK = 300; // meters
 	public static final double MIN_DESIRED_BATTERY_LEVEL = 0.2;
 
-	// may also be done by; public void setMaxDistanceWillingness(int maxDistanceWillingness)
-	// Sondre on minimal work dist
+
 	public static int MINIMUM_DISTANCE_TO_WORK = 1000; // In meters
 	public static int SIMULATION_DAYS = 2;
 	public static int SIMULATION_HOURS = 1;
 
 	public static boolean LOCAL_ROUTES = false;
 	public static int PEAK_LIMIT = Integer.MAX_VALUE;
-	//public static InputStream LOCAL_CHARGING_STATIONS_JSON_DIR = Variables.class.getResourceAsStream("/res/steinkjer.json");
-	//public static final String LOCAL_CHARGING_STATIONS_JSON_DIR=PATH+"/src/res/steinkjer.json";
 	public static int AGENT_PRINT_LIMIT = 100;
 	
 	public static final String PATH = "C:/Users/manpe/eclipse-workspace/ABM-Steinkjer_random";

@@ -6,8 +6,6 @@ import java.util.List;
  * A Route, having two or more Directions, is a class representation
  * of the Google Direction information then traveling from A to B.
  * 
- *  @see GoogleDirection
- * 
  * @author davidae
  *
  */

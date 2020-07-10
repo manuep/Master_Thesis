@@ -19,10 +19,10 @@ import org.json.simple.parser.ParseException;
  * Status: Working.
  * 
  * @author davidae
- *
+ * Modified by Manuel Pérez, specially to shift from the Google Direction API (requires an API KEY, and the subscription to the Google Cloud Services)
+ * The direction requests were moved to the Open Source Routing Machine (OSRM) project. The JSON response structure differs. Visit: http://project-osrm.org/
  */
 public class GoogleDirection {
-//	private String queryPath = "https://maps.googleapis.com/maps/api/directions/json?";
 	private String queryPath = "http://router.project-osrm.org/route/v1/driving/";
 
 	//TODO
@@ -53,7 +53,6 @@ public class GoogleDirection {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = new JSONObject();
 		boolean usedLocal = false;
-//		String query = queryPath+"origin="+from+"&destination="+to+"&key=AIzaSyDBk6O8cIkBjjBJCD38WYvvYsP0F5jPPTo";
 		String query = queryPath+from+";"+to+"?alternatives=false&steps=true&geometries=geojson&overview=simplified&annotations=false";
 
 		System.out.println(query);
@@ -82,16 +81,12 @@ public class GoogleDirection {
 		}catch (IndexOutOfBoundsException e) {
 			System.out.println("da capo2");
 			getJSONDirection(from,to);
-//			System.err.println("   > GoogleDirection (ERROR): "+obj.get("status")+". Using local routes.");
-//			routes = GoogleDirectionRepo.getRandomRoutes();
-//			usedLocal = true;
 		}
 		}
 		else {
 			getJSONDirection(from,to);
 		}
 		if(!usedLocal) {
-			//GoogleDirectionRepo.storeRoutesJSONObjects(routes);
 		}
 		return routes;
 		

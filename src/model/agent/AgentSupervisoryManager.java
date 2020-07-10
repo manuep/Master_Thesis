@@ -53,11 +53,6 @@ public class AgentSupervisoryManager {
 
 		generateAgentWorkers(noOfWorkerAgents);
 
-		//for(WorkerAgent wAgent: workerAgents) {
-		//	totalStoredEnergy += wAgent.getCar().getCurrentEnergy();
-		//}
-
-		//registerAgentsToSchedule(); // this is only for one day...
 		registerAgentsToSchedule(Variables.SIMULATION_DAYS);
 		startAgents();
 	}
@@ -71,11 +66,6 @@ public class AgentSupervisoryManager {
 
 		generateAgentWorkers(Variables.NUMBER_OF_WORKER_AGENTS);
 
-		//for(WorkerAgent wAgent: workerAgents) {
-		//	totalStoredEnergy += wAgent.getCar().getCurrentEnergy();
-		//}
-
-		//registerAgentsToSchedule(); // this is only for one day...
 		registerAgentsToSchedule(Variables.SIMULATION_DAYS);
 		startAgents();
 	}
@@ -98,13 +88,6 @@ public class AgentSupervisoryManager {
 			WorkerAgent agent = new WorkerAgent(i, city, 3); //id, city, number of car types
 			// WorkerAgent agent = new WorkerAgent(i, city, 3, 3); //id, city, number of car types, number of workerTypes
 			workerAgents.add(agent);
-//			System.out.println(agent.getHomeLocation());
-//			System.out.println(agent.getStartWorkTime());
-//			System.out.println(agent.getEndWorkTime());
-//			System.out.println(agent.getHomeToWorkRoute());
-//			System.out.println(agent.getWorkLocation());
-//			System.out.println(agent.getCar());
-//			System.out.println(agent.getHomeToWorkRoute().getTime());
 			
 
 			Thread t = new Thread(agent);
@@ -115,71 +98,23 @@ public class AgentSupervisoryManager {
 	}
 
 
-	//To be used??
 	public void updateAgentsScedules(){
-		// update workerAgent schedules
 		for(WorkerAgent wAgent: workerAgents) {
 			wAgent.updateRandomStartAndEndTimes();
 		}
-		// make new schedule, save old?
-		//schedule = new HashMap<String, ArrayList<Agent>>;
-		//globalClock.setSchedule(schedule);
-		//registerAgentsToSchedule();
 		registerAgentsToSchedule(Variables.SIMULATION_DAYS);
 	}
 
-	// Original
-	public void registerAgentsToSchedule() {
-		HashMap<String, ArrayList<Agent>> schedule = globalClock.getSchedule();
-		//for information: public HashMap<String, ArrayList<Agent>> getSchedule() {return schedule;}
 
-		// START TIME
-		for(WorkerAgent wAgent: workerAgents) {
-			String startTime = doubleToTimeString(wAgent.getStartWorkTime());
-
-			if(schedule.get(startTime) == null) {
-				ArrayList<Agent> newAgentSchedule = new ArrayList<>();
-				newAgentSchedule.add(wAgent);
-
-				schedule.put(startTime,newAgentSchedule);
-			}
-			else {
-				ArrayList<Agent> agentSchedule = schedule.get(startTime);
-				agentSchedule.add(wAgent);
-				schedule.put(startTime ,agentSchedule);
-
-			}
-		}
-
-		// END TIME
-
-		for(WorkerAgent wAgent: workerAgents) {
-			String endTime = doubleToTimeString(wAgent.getEndWorkTime());
-			if(schedule.get(endTime) == null) {
-				ArrayList<Agent> newAgentSchedule = new ArrayList<>();
-				newAgentSchedule.add(wAgent);
-
-				schedule.put(endTime,newAgentSchedule);
-			}
-			else {
-				ArrayList<Agent> agentSchedule = schedule.get(endTime);
-				agentSchedule.add(wAgent);
-				schedule.put(endTime ,agentSchedule);
-
-			}
-		}
-	}
-
-	// Used in new
+	// Modified by Manuel Pérez (manperbra@outlook.es) from here
+	
 	public void registerAgentsToSchedule(int days) {
 		HashMap<String, ArrayList<Agent>> schedule = globalClock.getSchedule();
-		//for information: public HashMap<String, ArrayList<Agent>> getSchedule() {return schedule;}
 	for(int day = 0; day<days; day++) {
 		// START TIME
 		for (WorkerAgent wAgent : workerAgents) {
 			String startTime = String.format("%02d", day+1)+"-"+doubleToTimeString(wAgent.getStartWorkTime(day));
 			if(debug) {System.out.println("I'm worker agent (id: "+wAgent.getAgentId()+"), and for day "+(day+1)+" I start work at "+doubleToTimeString(wAgent.getStartWorkTime(day)));}
-			//String.format("%02d", time[2])+"-"+String.format("%02d", time[0])+":"+String.format("%02d", time[1])
 			if (schedule.get(startTime) == null) {
 				ArrayList<Agent> newAgentSchedule = new ArrayList<>();
 				newAgentSchedule.add(wAgent);
@@ -311,16 +246,6 @@ public class AgentSupervisoryManager {
 			SortedMap<String, ArrayList<Double>> sortedSOCs = Utils.Statistics.StringDateComparator.sortHashMapDoubleList(agentSOCs);
 			Utils.Statistics.ExcelWriter.writeOutHashMapList(sortedSOCs);
 
-		/*try {
-			writeAgentInfo();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BiffException e){
-			e.printStackTrace();
-		} catch (WriteException e){
-			e.printStackTrace();
-		}*/
 
 
 			System.out.println(".... Done");
@@ -333,9 +258,6 @@ public class AgentSupervisoryManager {
 	{
 		System.out.println("Generating info of agent in the simulation...");
 
-		//throws BiffException, IOException, WriteException{
-		//WritableWorkbook wworkbook = null;
-
 		WritableWorkbook workbook = null;
 		try {
 			workbook = Workbook.createWorkbook(new File(Variables.PATH+"/InfoAgents.xls"));
@@ -344,12 +266,6 @@ public class AgentSupervisoryManager {
 			e.printStackTrace();
 		}
 		WritableSheet sheet = workbook.createSheet("First Sheet", 0);
-
-
-		//The following code fragment puts a label in cell A3,
-	    // Label label = new Label(0, 2, "A label record");
-		// sheet.addCell(label)
-
 
 		Label row = new Label(0,0,"Agent ID");
 		Label row1 = new Label(0,1,"Car type");

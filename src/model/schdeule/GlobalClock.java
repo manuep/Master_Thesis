@@ -56,18 +56,12 @@ public class GlobalClock extends Thread{
 
 	// Schedule
 	private HashMap<String,ArrayList<Agent>> schedule;
-	//private HashMap<Integer, HashMap<String,ArrayList<Agent>>> totalSchedule;
-
-	// SOCs agent id, time, soc
-	//private HashMap<String, ArrayList<Double>> agentSOCs;
 
 	// Debug mode
 	private boolean debug = (Variables.DEBUG_ALL || Variables.DEBUG_GlobalClock);
     
     private GlobalClock() {
     	this.schedule = new HashMap<String,ArrayList<Agent>>();
-		//this.totalSchedule = new HashMap<Integer, HashMap<String,ArrayList<Agent>>>();
-		//this.agentSOCs = new HashMap<String, ArrayList<Double>>();
 
 		this.active = true;
 		
@@ -79,7 +73,6 @@ public class GlobalClock extends Thread{
 		this.speed = Variables.SIMULATION_SPEED;
 		this.counter = Variables.COUNTER;
 		
-		//this.simulationDays = 2;
 		
 	}
 	
@@ -108,49 +101,19 @@ public class GlobalClock extends Thread{
 			} 
 			printTimeAt30();
 			incrementTime();
-			
-
-//			System.out.println("Im running");
- 			
-//			try {
-//				incrementTime();
-//			} catch (IllegalArgumentException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IllegalStateException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			checkScheduleNew();
-
-				//notefies agents if they are to do stuff
-//			try {
-//				checkScheduleNew();
-//			} catch (IllegalArgumentException | IllegalStateException | IllegalExecutionException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			if(Variables.EXCEL_OUTPUT!=1) { noteagentSOCs();}
 		}
 	}
 
 	private void noteagentSOCs(){
-		//ArrayList<double> SOCs = AgentSupervisoryManager.getagentSOCs();
-		//agentSOCs.put(getTimeStamp(),AgentSupervisoryManager.getagentSOCs());
-		//AgentSupervisoryManager.getagentSOCs();
 		AgentSupervisoryManager.getInstance().noteAgentSOCsTime();
-
-		//HashMap<String, ArrayList<Double>> agentSOCs;
-		//Variables.NUMBER_OF_WORKER_AGENTS
 
 	}
 
-	private void checkScheduleNew() { //throws IllegalArgumentException, IllegalStateException, ExecutionException {
+	private void checkScheduleNew() { 
 		if(time[0] > simulationHours || time[2]>simulationDays) {
-			active = false;  // terminates simulation clock
-			System.out.println(Variables.COUNTER);
-			System.out.println("STOPPING THE SIMULATION.");
-			
+			active = false;  		
 			PowerGrid.getInstance().doStatistics();
 
 
@@ -177,7 +140,6 @@ public class GlobalClock extends Thread{
 			really_needs=false;
 			ArrayList<Agent> agents = schedule.get(dayAndTimeToString());
 			if(debug){System.out.println("The time is "+dayAndTimeToString()+" (That is, day "+time[2]+", at "+timeToString()+")");
-			System.out.println("Notifying "+agents.size()+" agents.");}
 			Variables.needsmatlab=true;
 			for (Agent ag:agents) {
 				if(ag.getneedchargeinway2()) {
@@ -186,30 +148,21 @@ public class GlobalClock extends Thread{
 			} 
 			while(Variables.needsmatlab) {
 			try {
-				System.out.println("Llamando a matlab");
 				model.schdeule.Coord_matlab.llamamiento2(really_needs);
 				this.wait();
-				System.out.println("hola");
-//				Variables.needsmatlab=false;
 			}
 			catch (Exception e) {}
 			}
-			System.out.println("Matlab fini");
 			for(Agent agent: agents) {
 				if(debug){System.out.println("Agent ("+agent.getAgentId()+") has been notified.");}
 				agent.setDoAction(true);
-				agent.up(); // notefies the agent
-
+				agent.up(); 
 
 			}
 			ArrayList<WorkerAgent> agencitos = AgentSupervisoryManager.getInstance().getAgents();
 			System.out.println("ok");
 			System.out.println("Variable"+Variables.needsmatlab);
 			for(Agent ag:agencitos) {
-				System.out.println("Is agent"+ag.getAgentId()+" runninr"+ag.isRunning());
-				System.out.println("Is agent"+ag.getAgentId()+" charging"+ag.getChargingStragegy().isCharging());
-				System.out.println("Is agent need to charge"+ag.getChargingStragegy().needToCharge());
-				System.out.println("Is agent"+ag.getAgentId()+"doaction"+ag.isDoAction());
 				if(ag.getChargingStragegy().isCharging()) {
 					ag.up();
 					ag.getCar().setCurrentEnergy(ag.getCar().getCurrentEnergy()- (ag.getCar().getChargeRate()/80));
@@ -218,6 +171,7 @@ public class GlobalClock extends Thread{
 			}
 			
 			if(debug){System.out.println("Done notifying the "+agents.size()+" agents.");}
+		}
 		}
 
 	}
@@ -228,69 +182,12 @@ public class GlobalClock extends Thread{
 		counter=Variables.COUNTER;
 		active=true;
 		Variables.COUNTERMATLAB++;
-//		Variables.COUNTERMATLAB++;
-//		
-		
-//		while (Variables.COUNTER>30) {
-//			try {
-//				// Aqui deberia ir mandar la matriz y poner a 0 la variable recibido
-//				System.out.println("Stopping simulation, calculating energy prices");
-//				System.out.println("The location of agents are:"+AgentSupervisoryManager.getInstance().getagentLocations());
-//				System.out.println("The battery of agents are"+AgentSupervisoryManager.getInstance().getagentSOCs());
-//				Variables.COUNTER--;
-//				Variables.COUNTERMATLAB--;
-//				
-//				System.out.println(Variables.COUNTER);
-//				System.out.println(Variables.COUNTERMATLAB);
-//				//Variable recibido a 0, iniciar proceso de mandar y recibir
-//				//Coord_matlab.llamamiento();
-//				//wait(5000);
-//				
-//				Variables.COUNTER=0;
-				//Quien debe reintroducir counter=0 es la funcion de toma de matriz de matpower 
-//				Scanner in = new Scanner(System.in);
-//				int reactivar = Integer.parseInt(in.nextLine());
-//				if (reactivar==1) {
-//					notifyAll();
-//				}
-//			}
-//			catch (InterruptedException e) {
-//				Thread.currentThread().interrupt();		
-//				System.out.println("Holis");
-//			}
-			
-//		}
-//		ArrayList<WorkerAgent> agents = AgentSupervisoryManager.getInstance().getAgents();
-//		int indice= 0;
-//		for (WorkerAgent wAgent:agents) {
-//			//System.out.println(AgentSupervisoryManager.getInstance().getAgentTimesString(wAgent));
-//			if (AgentSupervisoryManager.getInstance().getAgentTimesString(wAgent).contains(timeToString())) {
-//				indice = AgentSupervisoryManager.getInstance().getAgentTimesString(wAgent).indexOf(timeToString());	
-//				System.out.println("The agent"+wAgent.getAgentId()+"is moving towards"+wAgent.getCurrentRoute().getDirections().get(indice).getTarget());
-				//wAgent.setCurrentLocation(wAgent.getCurrentRoute().getDirections().get(indice).getTarget());
-				//System.out.println("Bingo");
-//			}
-//		}
-//		Variables.COUNTERMATLAB++;
-//		try {
-//			while(Variables.COUNTERMATLAB>10) {
-//				llamarmatlab();
-//				wait(5000);
-//				
-//				Variables.COUNTERMATLAB=0;
-//			}
-//		}
-//			catch (InterruptedException e) {}
-			
-		
-		//System.out.println(AgentSupervisoryManager.getInstance().getagentSOCs());
-		//System.out.println(AgentSupervisoryManager.getInstance().getagentLocations());
+
 		if(time[1] >= 59) {
 			time[1] = 0;
 			time[0]++;
 			if(time[0] == 24) {
 				time[0] = 0;
-				//nextSchedule();
 				time[2]++;
 			}
 		}
@@ -298,13 +195,15 @@ public class GlobalClock extends Thread{
 			time[1]++;
 		}
 		
+		//The following part, aimed to write statistics of charging in .txt files was fully created by Manuel Pérez (manperbra@outlook.es)
+		
 		BufferedWriter writer;
 		BufferedWriter writer2;
 		BufferedWriter writer3;
 		BufferedWriter writer5;
 		
 		try {
-			writer = new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\stations_file.txt",true));
+			writer = new BufferedWriter(new FileWriter("directory\\stations_file.txt",true));
 			writer.newLine();
 			writer.append(String.format("%02d", time[2])+"/01/2020 "+String.format("%02d", time[0])+":"+String.format("%02d", time[1])+";");
 			
@@ -323,7 +222,7 @@ public class GlobalClock extends Thread{
 		}
 		
 		try {
-			writer2 = new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\agents_file.txt",true));
+			writer2 = new BufferedWriter(new FileWriter("directory\\agents_file.txt",true));
 			writer2.newLine();
 			writer2.append(String.format("%02d", time[2])+"/01/2020 "+String.format("%02d", time[0])+":"+String.format("%02d", time[1])+";");
 			List<WorkerAgent> agents = AgentSupervisoryManager.getInstance().getAgents();
@@ -346,7 +245,7 @@ public class GlobalClock extends Thread{
 		}
 		
 		try {
-			writer3 = new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\losses.txt",true));
+			writer3 = new BufferedWriter(new FileWriter("directory\\losses.txt",true));
 			writer3.newLine();
 			List<WorkerAgent> agents = AgentSupervisoryManager.getInstance().getAgents();
 			boolean ch=false;
@@ -371,7 +270,7 @@ public class GlobalClock extends Thread{
 	}
 		
 		try {
-			writer5 = new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\voltages.txt",true));
+			writer5 = new BufferedWriter(new FileWriter("directory\\voltages.txt",true));
 			writer5.newLine();
 			writer5.append(String.format("%02d", time[2])+"/01/2020 "+String.format("%02d", time[0])+":"+String.format("%02d", time[1])+";");
 			writer5.append(Arrays.toString(Variables.voltage_magnitudes)+";"+Arrays.toString(Variables.voltage_angles));
@@ -381,73 +280,11 @@ public class GlobalClock extends Thread{
 		e.printStackTrace();
 	}
 		
-//		List<WorkerAgent> agents = AgentSupervisoryManager.getInstance().getAgents();
-//		double[] charging_loads= new double[agents.size()];
-//		for (Agent ag:agents) {
-//			if (ag.getChargingStragegy().isCharging()) {
-//			charging_loads[ag.getAgentId()]=ag.getCar().getChargeRate();
-//		}
-//			else {
-//				charging_loads[ag.getAgentId()]=0;
-//			}
-//				
-//		}
-//		Arrays.sort(charging_loads);	
-//		List<ChargingStation> cstations=ChargingStationMap.getChargingStations();
-//		TreeMap <Double,ChargingStation> st_ordered= Utils.Search.pricelist(cstations);
-//		int k=agents.size()-1;
-//		double totalito=0;
-//		for (Map.Entry<Double, ChargingStation>entry:st_ordered.entrySet()) {
-//			for (int j=0;j<entry.getValue().getMaxChargingPoints();j++) {
-//				if (k>=0) {
-//				totalito=totalito+(entry.getValue().getPriceCurrent()*charging_loads[k]);
-//				}
-//				k--;
-//			}
-//		}
-//		
-//		BufferedWriter writer4;
-//		try {
-//			writer4 = new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\minimum_cost.txt",true));
-//			writer4.newLine();
-//			writer4.append(String.format("%02d", time[2])+"/01/2020 "+String.format("%02d", time[0])+":"+String.format("%02d", time[1])+";");
-//			writer4.append(totalito+";");
-//			writer4.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-			
-			
-			
-		
 		
 	}
 
 
 
-//	private void nextSchedule() {
-//		totalSchedule.put(time[2], schedule);
-		// update probs (times) and schedule?
-//		if(time[2] < simulationDays) {
-			// update scedule
-//			this.schedule = new HashMap<String,ArrayList<Agent>>();
-			// update probs --> this is done in the agents!!!?
-			//AgentSupervisoryManager.updateAgentsScedules();
-
-//			ArrayList<WorkerAgent> workerAgents = new ArrayList<>();
-//			workerAgents = AgentSupervisoryManager.getWorkerAgents();
-//			for(WorkerAgent wAgent: workerAgents) {
-//				wAgent.updateRandomStartAndEndTimes();
-//				AgentSupervisoryManager.registerAgentToSchedule(wAgent);
-//			}
-			// make new schedule, save old?
-			//schedule = new HashMap<String, ArrayList<Agent>>;
-			//globalClock.setSchedule(schedule);
-			//AgentSupervisoryManager.registerAgentsToSchedule();
-			//
-//		}
 
 
 	/**
@@ -481,8 +318,6 @@ public class GlobalClock extends Thread{
 		if(time[1] == 00) {
 			System.out.println("The time is "+timeToString()+" (Day "+time[2]+")");
 			System.out.println("losses= "+Variables.losses_real+";"+Variables.losses_imag);
-			//System.out.println(AgentSupervisoryManager.getInstance().getagentSOCs());
-			//System.out.println(AgentSupervisoryManager.getInstance().getagentLocations());
 			}
 		
 		if(time[1] == 30) {
@@ -565,52 +400,6 @@ public class GlobalClock extends Thread{
 		}
 		return tiemposenstring;
 	}
-
-	
-//	public synchronized void parar(int contador) {
-//		contador= Variables.COUNTER;
-//		if (contador>180)
-//			try {
-//				Thread.currentThread().wait();
-//				System.out.println("The clock is stopped");
-//				System.out.println("Enter 1 when you want to restart:");
-//				Scanner in = new Scanner(System.in);
-//				int answer = Integer.parseInt(in.nextLine());
-//				while (answer!=1) {
-//					System.out.println("Enter 1 when you want to restart:");
-//					answer = Integer.parseInt(in.nextLine());
-//				}
-//				if (answer==1) {
-//					contador=0;
-//					Thread.currentThread().notify();
-//				}
-//				
-//			}
-//		catch (InterruptedException e) {
-//			Thread.currentThread().interrupt();
-//			
-//		}
-//	}
-
-
-	//public void doScheduleStatistics() {
-	//	System.out.println("Generating statistics from Simulation...");
-	//	SortedMap<String, Double> sortedHourlyUsage = Utils.Statistics.StringDateComparator.sortHashMap();
-	//	SortedMap<String, Double> sortedChargersUsage = Utils.Statistics.StringDateComparator.sortHashMapInt(hourlyAgents);
-	//	//SortedMap<String, Double> sortedStateOfCharge = Utils.Statistics.StringDateComparator.sortHashMap(minuteStateOfCharge);
-	//	//Sondre stuff
-	//	//SortedMap<String, Double> sortedAgentIDs = Utils.Statistics.StringDateComparator.sortHashMapInt(agentIDs);
-	//	//SortedMap<String, Double> sortedAgentChargingStationIDs = Utils.Statistics.StringDateComparator.sortHashMapInt(agentChargingStationIDs);
-	//	//SortedMap<String, Double> sortedAgentChargingValues = Utils.Statistics.StringDateComparator.sortHashMap(agentChargingValues);
-//
-//		Utils.Statistics.ExcelWriter.writeOutHashMap(sortedHourlyUsage, sortedChargersUsage);
-
-		//Utils.Statistics.ExcelWriter.writeOutHashMap(sortedHourlyUsage, sortedChargersUsage, sortedStateOfCharge);
-
-		//Utils.Statistics.ExcelWriter.writeOutHashMap(sortedHourlyUsage, sortedChargersUsage, sortedStateOfCharge, sortedAgentIDs, sortedAgentChargingStationIDs, sortedAgentChargingValues);
-//		System.out.println(".... Done");
-//		System.out.println("No. of agents: "+Variables.NUMBER_OF_WORKER_AGENTS);
-//	}
 
 
 	

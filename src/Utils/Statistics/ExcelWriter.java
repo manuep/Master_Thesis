@@ -1,3 +1,5 @@
+//The simulation tool created by Manuel Pérez (manperbra@outlook.es) no longer uses the Excel writer of outputs.
+
 package Utils.Statistics;
 
 import java.io.File;

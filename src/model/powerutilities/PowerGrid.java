@@ -1,3 +1,5 @@
+//This model of the power grid is no longer used in the model developed by Manuel Pérez (manperbra@outlook.es). 
+
 package model.powerutilities;
 
 import java.util.*;

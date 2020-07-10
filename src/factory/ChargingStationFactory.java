@@ -58,10 +58,9 @@ public class ChargingStationFactory {
 			
 			String position = (String) jsonStation.get("latlong");
 			System.out.println(position);
-			//position = position.replace("(", "");
-			//position = position.replace(")", " ");
 
 
+			// Henceforth, the code was modified by Manuel Pérez (manperbra@outlook.es) 
 			String[] positionArray = position.split(",");
 			double latitude = Double.parseDouble(positionArray[0]);
 			double longitude = Double.parseDouble(positionArray[1]);
@@ -71,7 +70,7 @@ public class ChargingStationFactory {
 			int ledigeplasser=(int) cpoints;
 			System.out.println(ledigeplasser);
 			String ladefart = ("fast");
-			String eier = ("Kom");
+			String eier = ("Kommune");
 			int tidsbegrensing = 0;
 			int postnr=7050;
 			String poststed=("Steinkjer");

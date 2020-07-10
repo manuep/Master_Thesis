@@ -12,7 +12,7 @@ public class Car {
 	// Variables
 	private double currentSpeed, currentEnergy, maxEnergy, dischargeRate, chargeRate;
 
-
+// All car properties were modified by Manuel Pérez (manperbra@outlook.es), updating their current features (2020) and intentionally for the master thesis (see Readme)
 
 	public Car(int iD, int typeID, double currentEnergyFraction) {
 		ID = iD;
@@ -22,7 +22,7 @@ public class Car {
 			this.typeModel = "Leaf";
 			this.description = "Sedan, 5 seats";
 			this.maxEnergy = 40;
-			this.dischargeRate = 4*0.174;
+			this.dischargeRate = 5*0.174;
 			this.chargeRate = 50;
 			this.currentEnergy = this.maxEnergy*currentEnergyFraction;
 		}
@@ -31,7 +31,7 @@ public class Car {
 			this.typeModel = "Model S";
 			this.description = "Sedan, 5 seats";
 			this.maxEnergy = 100;
-			this.dischargeRate = 4*0.198;
+			this.dischargeRate = 5*0.198;
 			this.chargeRate = 150;
 			this.currentEnergy = this.maxEnergy*currentEnergyFraction;
 		}
@@ -39,8 +39,8 @@ public class Car {
 			this.name = "Volkswagen";
 			this.typeModel = "eGolf";
 			this.description = "Sedan, 5 seats";
-			this.maxEnergy = 30;
-			this.dischargeRate = 4*0.179;
+			this.maxEnergy = 35.8;
+			this.dischargeRate = 5*0.179;
 			this.chargeRate = 50;
 			this.currentEnergy = this.maxEnergy*currentEnergyFraction;
 		}
@@ -77,7 +77,7 @@ public class Car {
 	public Car(double maxEnergy, double currentEnergy) {
 		this.maxEnergy = maxEnergy;
 		this.currentEnergy = currentEnergy;
-		this.dischargeRate = 0.212; //Nissan Leaf
+		this.dischargeRate = 0.212;
 	}
 	
 	/**

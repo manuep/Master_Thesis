@@ -32,9 +32,6 @@ public class RouteFactory {
 		}
 
 
-		//JSONObject bounds = (JSONObject) routes.get("bounds"); //SW and NE lng and lat
-		//TODO -> Do we need the bounds of the Route?
-
 		JSONArray legsArray = (JSONArray) routes.get("legs"); 
 		JSONObject legs = (JSONObject) legsArray.get(0); // Summary, and steps
 
@@ -43,8 +40,6 @@ public class RouteFactory {
 		Iterator iter = stepsArray.iterator();
 		while (iter.hasNext()) {
 			JSONObject item = (JSONObject) iter.next();
-//			JSONObject duration = (JSONObject) item.get("duration");
-//			JSONObject distance = (JSONObject) item.get("distance");
 			
 			long duration=0;
 			long distance=0;
@@ -75,21 +70,11 @@ public class RouteFactory {
 			
 			Direction direction = new Direction (source, target, distance,duration);
 					
-					
-//			JSONObject startLocation = (JSONObject) item.get("start_location");
-//			Location source = new Location((double)startLocation.get("lat"), (double) startLocation.get("lng"));
-//
-//			JSONObject endLocation = (JSONObject) item.get("end_location");
-//			Location target = new Location((double)endLocation.get("lat"), (double) endLocation.get("lng"));
-//
-//			Direction direction = new Direction(source, target, (long)distance.get("value"), (long)duration.get("value"));
+				
 			directions.add(direction);
 
 		}
 
-		// ROUTE OBJECT
-//		JSONObject totalDuration = (JSONObject) legs.get("duration");
-//		JSONObject totalDistance = (JSONObject) legs.get("distance");
 		
 		long totalDuration =0;
 		long totalDistance=0;
@@ -107,7 +92,6 @@ public class RouteFactory {
 			totalDistance=new Double(totalDistance_d).longValue();
 		}
 		
-//		Route route = new Route(directions, (long)totalDuration.get("value"), (long) totalDistance.get("value"));
 		Route route = new Route(directions, totalDuration, totalDistance);
 		if(debug) {System.out.println("   > Completed a route with "+directions.size()+" sub-directions");}
 		

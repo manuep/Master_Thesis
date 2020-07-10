@@ -33,8 +33,8 @@ public class ChargingStation {
 
 	// SPEED
 	private int amp, voltage;
-	private String chargeSpeed; // '16A' or 'hurtiglading' (speedcharging)
-	private double chargeRate; // kW/h
+	private String chargeSpeed; //
+	private double chargeRate; // 
 
 	// CHARGING DATA
 	private double totalKW, currentKW; 
@@ -70,16 +70,15 @@ public class ChargingStation {
 		this.allowedToCharge = true;
 
 	}
-
+	// Some relevant changes were introduced from here by Manuel Pérez (manperbra@outlook.es), intended to simulation the booking of a charging spot from the moment
+	// the agent decided to charge, before leaving its current location
+	
 	public synchronized boolean registedCharger(Agent agent) {
 		if(isAvailableChargingSpot()) {
 			openChargingPoints --;
-			//new
 			double maxChargeRateToUse = agent.getCar().getChargeRate();
 			if (getChargeRate()<maxChargeRateToUse){maxChargeRateToUse=getChargeRate();}
 			currentKW += maxChargeRateToUse;
-			//old
-			//currentKW += getChargeRate();
 			if(chargers.contains(agent)) {
 				System.out.println("ChargingStation ("+address+"): Adding duplicate Agent ("+agent.getAgentId()+")");
 			}
@@ -90,7 +89,6 @@ public class ChargingStation {
 			}
 
 			updatePowerGrid(maxChargeRateToUse, agent);
-			//updatePowerGrid(getChargeRate(), agent);
 
 			return true;
 		}
@@ -99,12 +97,9 @@ public class ChargingStation {
 	}
 
 	public void unregisterCharger(Agent agent, double chargeTime) {
-		//new
 		double maxChargeRateToUse = agent.getCar().getChargeRate();
 		if (getChargeRate()<maxChargeRateToUse){maxChargeRateToUse=getChargeRate();}
 		currentKW -= maxChargeRateToUse;
-		//old
-		//currentKW -= getChargeRate();
 		if(!chargers.remove(agent)) {
 			System.err.println("ChargingStation ("+address+"): Trying to remove Agent ("+agent.getAgentId()+") from my list, but he isn't in it.");
 			String res = "";
@@ -116,16 +111,12 @@ public class ChargingStation {
 		openChargingPoints++;
 
 		updatePowerGrid(-maxChargeRateToUse, agent);
-		//updatePowerGrid(-getChargeRate(), agent);
 	}
 
 	public void unregisterCharger(Agent agent) {
-		//new
 		double maxChargeRateToUse = agent.getCar().getChargeRate();
 		if (this.getChargeRate()<maxChargeRateToUse){maxChargeRateToUse=this.getChargeRate();}
 		currentKW -= maxChargeRateToUse;
-		//old
-		//currentKW -= getChargeRate();
 		if(!chargers.remove(agent)) {
 			System.err.println("ChargingStation ("+address+"): Trying to remove Agent ("+agent.getAgentId()+") from my list, but he isn't in it.");
 			String res = "";

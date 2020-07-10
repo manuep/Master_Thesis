@@ -81,11 +81,7 @@ public abstract class Agent extends Thread{
 		else if (Variables.CHARGING_STRATEGY_FOR_AGENTS==3) {
 			this.chargingStrategy = new LP (this,Variables.MIN_DESIRED_BATTERY_LEVEL);
 		}
-		int[] car_types= {2,	2,	2,	3,	3,	3,	1,	1,	2,	3,	1,	2,	1,	1,	1,	1,	1,	1,	1,	2};
-		int[] energy_pref= {24,	51,	21,	19,	8,	5,	12,	22,	56,	14,	9,	78,	19,	23,	17,	7,	23,	24,	9,	22};
-		double[] pref_0= {0.522447372,	0.544200201,	0.484098013,	0.389684115,	0.246252107,	0.589456119,	0.720242108,	0.278910887,	0.255277175,	0.616756997,	0.256187486,	0.403365367,	0.693139595,	0.756523494,	0.736875112,	0.680224422,	0.65784007,	0.297411018,	0.225970056,	0.269378249};
-		double[] pref_1= {0.477552628,	0.455799799,	0.515901987,	0.610315885,	0.753747893,	0.410543881,	0.279757892,	0.721089113,	0.744722825,	0.383243003,	0.743812514,	0.596634633,	0.306860405,	0.243476506,	0.263124888,	0.319775578,	0.34215993,	0.702588982,	0.774029944,	0.730621751};
-
+		
 
 		this.counter_ag=0;
 		
@@ -93,31 +89,25 @@ public abstract class Agent extends Thread{
 		this.agentId = agentId;
 		this.city = city;
 		this.homeLocation = generateHomeLocation();  //random in city
-//		this.workLocation= generateWorkLocation();
 		this.routeFactory = new RouteFactory();
 		this.isRunning = true;
 		double someRandomNumber =new Random().nextDouble();
 		double someRandomNumber2 = new Random().nextDouble() * (1-0.4)+ 0.4;
-//		this.car=new Car(agentId,car_types[agentId],someRandomNumber);
 		if(Variables.StartSOCsAtOne){ someRandomNumber2 = 1;}
 		if (someRandomNumber2>1){someRandomNumber2=0.90;}
 		if(debug){System.out.println("   Random number 2: "+someRandomNumber2);}
-        //if(debug){System.out.println("   Random number: "+someRandomNumber+" then; "+(someRandomNumber < 0.33)+(someRandomNumber < 0.66));}
 
 		if(someRandomNumber < 0.33) {
-			//if(someRandomNumber < 1/numberOfCarTypes)
+
             if(debug){System.out.println("   Agent ID: "+agentId+", cartypeId: "+(numberOfCarTypes-2));}
-			//this.car = new Car(agentId,(int)  numberOfCarTypes-2, 0.95);
 			this.car = new Car(agentId,(int)  numberOfCarTypes-2, someRandomNumber2);
 
 		}
 		else if(someRandomNumber < 0.66) {
             if(debug){System.out.println("   Agent ID: "+agentId+", cartypeId: "+(numberOfCarTypes-1));}
-            //this.car = new Car(agentId, (int) numberOfCarTypes - 1, 0.95);
 			this.car = new Car(agentId, (int) numberOfCarTypes - 1, someRandomNumber2);
         }
 		else {
-			//this.car = new Car(agentId,(int)  numberOfCarTypes, 0.95);
 			this.car = new Car(agentId,(int)  numberOfCarTypes, someRandomNumber2);
 		}
 		if(debug){System.out.println(" I'm agent"+agentId+" &  I drive a "+this.getCar().getName()+" "+this.getCar().getTypeModel()+".");}
@@ -133,7 +123,7 @@ public abstract class Agent extends Thread{
 		
 		BufferedWriter writer8;
 		try {
-			writer8=new BufferedWriter(new FileWriter("C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer_random\\agents_prop.txt",true));
+			writer8=new BufferedWriter(new FileWriter("directory\\eclipse-workspace\\ABM-Steinkjer_random\\agents_prop.txt",true));
 			writer8.newLine();
 			writer8.append(agentId+";"+car.getMaxEnergy()+";"+car.getCurrentEnergy()+";"+minimumEnergyPrefernce+";"+preferences[0]+";"+preferences[1]+";");
 			writer8.close();
@@ -173,8 +163,6 @@ public abstract class Agent extends Thread{
 	/**
 	 * Updates the Agent's car current energy level with respect 
 	 * to do distance driven in meters.
-	 * 
-	 * @param meters
 	 */
 	public void updateAfterDrive(int meters) {
 		double energyUsed = getCar().getEnergyUsed(meters);
@@ -231,11 +219,8 @@ public abstract class Agent extends Thread{
 
 	
 	/**
-	 * Calculates the driving distance from a location to another location.
-	 * It queries the Google Direction API.
+	 * Calculates the driving distance from a location to another location
 	 * 
-	 * @param Location source, Location target
-	 * @return an integer, representing meters
 	 */
 	public int getDistanceFromAndTo(Location source, Location target) {
 		Route route = routeFactory.createRouteFromAndTo(source, target);
@@ -244,10 +229,6 @@ public abstract class Agent extends Thread{
 
 	/**
 	 * Calculates the driving distance from your current location to another location.
-	 * It queries the Google Direction API.
-	 * 
-	 * @param Location source, Location target
-	 * @return an integer, representing meters
 	 */
 	public int getDistanceTo(Location target) {
 		Route route = routeFactory.createRouteFromAndTo(getCurrentLocation(), target);
@@ -262,9 +243,6 @@ public abstract class Agent extends Thread{
 
 	/**
 	 * Calculates the energy usage from a source location to another target location.
-	 * It queries to Google Directions API
-	 * @param Location source, Location target
-	 * @return an integer, representing meters
 	 */
 	public double getEnergyUsageToLocation(Location source, Location target) {
 		int distanceToSource = getDistanceFromAndTo(source, target);
@@ -274,9 +252,6 @@ public abstract class Agent extends Thread{
 
 	/**
 	 * Calculates the energy usage from your current location to another target location.
-	 * It queries to Google Directions API
-	 * @param Location destination
-	 * @return
 	 */
 	public double getEnergyUsageToLocation(Location destination) {
 		return getEnergyUsageToLocation(getCurrentLocation(), destination);
@@ -414,6 +389,7 @@ public abstract class Agent extends Thread{
 		return tiempos_cambio;
 	}
 
+	// Henceforth, the code was modified by Manuel Pérez
 	public double probOfChargingFromSOC(){
 		double lowestDesiredBatteryEnergy = this.getCar().getMaxEnergy() *Variables.MIN_DESIRED_BATTERY_LEVEL;
 		return 1 - (this.getCar().getCurrentEnergy() - lowestDesiredBatteryEnergy) / (this.getCar().getMaxEnergy() - lowestDesiredBatteryEnergy);

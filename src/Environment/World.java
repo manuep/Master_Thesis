@@ -38,9 +38,13 @@ public class World {
 		int days = Integer.parseInt(in.nextLine());
 		GlobalClock.getInstance().setSimulationDays(days);
 		Variables.SIMULATION_DAYS = days;
-		Variables.SIMULATION_HOURS = days*24;
 		
-		System.out.println("Charging Strategy? 1=C, 2=D, 3=LP");
+		System.out.println("Number of hours :");
+		int hours = Integer.parseInt(in.nextLine());
+		GlobalClock.getInstance().setSimulationHours(hours);
+		Variables.SIMULATION_HOURS = hours;
+		
+		System.out.println("Charging Strategy? 1=Centrally-controlled, 2=Uncontrolled, 3=Decentralized control, local pricing");
 		int strat=Integer.parseInt(in.nextLine());
 		Variables.CHARGING_STRATEGY_FOR_AGENTS=strat;
 	}

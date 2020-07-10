@@ -109,15 +109,15 @@ public class Search {
 		return reachablestations;
 	}
 
+
+	// All the following functions were introduced by Manuel Pérez (manperbra@outlook.es) in order to satisfy the requests of the new charging strategies
+	//(see Readme file)
 	public static TreeMap<Double,ChargingStation>  pricelist(List<ChargingStation> cstations){ 
 		System.out.println(105);
 		HashMap<Double,ChargingStation> unsortedmap= new HashMap<Double,ChargingStation>();
 		for (int j=1; j<cstations.size();j++) {
 			if(cstations.get(j).getMaxChargingPoints()>0) {
-//			System.out.println("En el bucle");
-//			entrynew.= (cstations.get(j).getPriceCurrent(), cstations.get(j));//(cstations.get(j).getPriceCurrent(), cstations.get(j));
-			unsortedmap.put(cstations.get(j).getPriceCurrent(), cstations.get(j));//(cstations.get(j).getPriceCurrent(), cstations.get(j));
-//			System.out.println(unsortedmap);
+			unsortedmap.put(cstations.get(j).getPriceCurrent(), cstations.get(j));
 			}
 		}
 		TreeMap<Double,ChargingStation> sortedmap1=new TreeMap<Double,ChargingStation>();
@@ -203,23 +203,8 @@ public class Search {
 			else if (probSOC<0) {
 				probSOC=0;
 			}
-//			System.out.println("price"+price);
-//			double prob=((2*base_time-total_time)/base_time);
 			double prob=(probdist*pref[0]+((10-price)/10)*pref[1])*probSOC;
-//			if(prob<0) {
-//				double lat=latitudes.get(cstations.get(j).getID()-1);
-//				double longi=longitudes.get(cstations.get(j).getID()-1);
-//				System.out.println("prob was <0");
-//				System.out.println("lat"+lat+"long"+longi);
-//				locationDistance=Utils.Distance.getDistanceBetweenPoints(longi,lat,location.getLatitude(),location.getLongitude());
-//				System.out.println("new distance is"+locationDistance);
-//				prob=(((range-locationDistance)/range)*pref[0]+((10-price)/10)*pref[1])*probSOC;
-//				System.out.println("new prob is"+prob);
-//			}
-			
-//			System.out.println("prob"+prob);
-			unsortedmap.put(prob, cstations.get(j));//(cstations.get(j).getPriceCurrent(), cstations.get(j));
-//			System.out.println(unsortedmap);
+			unsortedmap.put(prob, cstations.get(j));
 			System.out.println("Location of station"+ cstations.get(j).getID()+"is"+cstations.get(j).getLocation().getLatitude()+","+cstations.get(j).getLocation().getLongitude()+"the distance is"+total_dist+"and the base dist is"+base_dist+"therefore the prob is"+probdist);
 			System.out.println("Price is"+price);
 			System.out.println("The total prob is"+prob);
@@ -227,7 +212,6 @@ public class Search {
 		}
 		TreeMap<Double,ChargingStation> sortedmap1=new TreeMap<Double,ChargingStation>();
 		sortedmap1.putAll(unsortedmap);
-//		System.out.println(sortedmap1);
 		for (Map.Entry<Double,ChargingStation> mp:sortedmap1.entrySet()) {
 		System.out.println(mp.getValue().getID()+" which has prob "+mp.getKey());
 		}
@@ -275,13 +259,7 @@ public class Search {
 		double base_time= ag.getRouteFactory().createRouteFromAndTo(ag.getHomeLocation(),location).getTime();
 		for (int j=0; j<cstations.size();j++) {
 			if(cstations.get(j).getMaxChargingPoints()>0) {
-//			System.out.println(pref[0]+","+pref[1]);
-//			double time_toCS= ag.getRouteFactory().createRouteFromAndTo(ag.getHomeLocation(),cstations.get(j).getLocation()).getTime();
-//			double time_fromCS=ag.getRouteFactory().createRouteFromAndTo(cstations.get(j).getLocation(), location).getTime();
-//			double total_time= time_toCS+time_fromCS;
 			double locationDistance=Utils.Distance.getDistanceBetweenPoints(location.getLongitude(), location.getLatitude(), cstations.get(j).getLocation().getLatitude(), cstations.get(j).getLocation().getLongitude());
-//			System.out.println("price"+price);
-//			double prob=((2*base_time-total_time)/base_time);
 			double prob=((range-locationDistance)/range)*pref[0];//+((10-price)/10)*pref[1];
 			if(locationDistance>range) {
 				double lat=latitudes.get(cstations.get(j).getID()-1);
@@ -292,30 +270,20 @@ public class Search {
 				System.out.println("new distance is"+locationDistance);
 			}
 			
-//			System.out.println("prob"+prob);
+
 			unsortedmap.put(locationDistance, cstations.get(j));//(cstations.get(j).getPriceCurrent(), cstations.get(j));
-//			System.out.println(unsortedmap);
+
 			System.out.println("Location of station is"+cstations.get(j).getLocation().getLatitude()+","+cstations.get(j).getLocation().getLongitude()+"the distance is"+locationDistance+"therefore the prob is"+prob);
 		}
 		}
 		TreeMap<Double,ChargingStation> sortedmap1=new TreeMap<Double,ChargingStation>();
 		sortedmap1.putAll(unsortedmap);
-//		System.out.println(sortedmap1);
 		for (Map.Entry<Double,ChargingStation> mp:sortedmap1.entrySet()) {
 		System.out.println(mp.getValue().getID()+" which has distance "+mp.getKey());
 		}
 		return sortedmap1;
 	}
 	
-//	public static void pricelist2 (List<ChargingStation> cstations){ 
-//		HashMap<Double,ChargingStation> unsortedmap= new HashMap<Double,ChargingStation>();
-//		for (int j=1; j<unsortedmap.size();j++) {
-//			unsortedmap.put(cstations.get(j).getPriceCurrent(), cstations.get(j));//(cstations.get(j).getPriceCurrent(), cstations.get(j));
-//		}
-//		System.out.println("The pricelist2 map has"+unsortedmap.size());
-//		TreeMap<Double,ChargingStation> sortedmap=new TreeMap<Double,ChargingStation>();
-//		sortedmap.putAll(unsortedmap);
-//	}
 	
 	public static ChargingStation cheapeststation(List<ChargingStation> cstations){
 		System.out.println("Linea 127");
@@ -326,13 +294,11 @@ public class Search {
 	public static ChargingStation preferredstation(List<ChargingStation> cstations, double[] pref, Location location, double range, Agent ag){
 		TreeMap<Double,ChargingStation> sortedmap2= preflist(cstations,pref,location, range, ag);
 		return sortedmap2.lastEntry().getValue();
-//		return sortedmap2.lastEntry().getValue();
 	}
 	
 	public static ChargingStation closeststation (List<ChargingStation> cstations, double[] pref, Location location, double range, Agent ag){
 		TreeMap<Double,ChargingStation> sortedmap2= closelist(cstations,pref,location, range, ag);
 		return sortedmap2.firstEntry().getValue();
-//		return sortedmap2.lastEntry().getValue();
 	}
 	
 	

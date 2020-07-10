@@ -1,3 +1,5 @@
+//This function to coordinate the JAVA code with the Matlab engine was fully introduced by Manuel Pérez (manperbra@outlook.es)
+
 package model.schdeule;
 
 import java.io.IOException;
@@ -35,22 +37,6 @@ import com.mathworks.engine.FutureMatlab;
 
 public class Coord_matlab {
 	
-//	public void run() {
-//		try {
-//			loop();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	public synchronized void loop() throws Exception {
-//		while(Variables.needsmatlab) {
-//			llamamiento();
-//		
-//		}
-//	}
-	
 	public static void llamamiento2(boolean really_needs) throws Exception {
 		if (really_needs) {
 		llamamiento();
@@ -62,9 +48,9 @@ public class Coord_matlab {
 	}
 	
 	
+	//All day-ahead Nordpool hour prices for zone DK2 (January 8th- January 22nd) are included in the following matrix. Visit: https://www.nordpoolgroup.com/Market-data1/Dayahead/Area-Prices/ALL1/Hourly/?view=table
 	
 	public static void llamamiento ()  throws Exception {
-//			double[] nordpool_prices= new double[] {140.74,	139.62,	138.39,	138.19,	139.01,	143.4,	144.93,	145.13,	151.77,	171.48,	173.73,	173.73,	173.22,	173.02,	173.53,	177.82,	183.84,	193.14,	192.63,	188.13,	182.11,	181.09,	179.45,	173.22};
 			double[][] nordpool_prices= new double[][] {
 				{140.67,138.74,136.00,134.07,133.16,132.65,133.46,135.19,138.95,141.48,142.40,142.80,141.99,141.38,141.79,142.80,146.16,157.33,311.00,157.02,138.13,135.69,131.84,123.41},
 				{129.60,125.55,121.30,92.87,76.28,42.90,38.95,51.19,74.97,94.19,101.78,102.08,101.88,100.97,85.39,84.48,100.46,118.97,121.10,87.00,41.38,33.08,13.15,0.40},
@@ -90,24 +76,20 @@ public class Coord_matlab {
 		StringWriter output = new StringWriter();
 		StringWriter output1 = new StringWriter();
 		StringWriter output2 = new StringWriter();
-		matEng.eval("cd 'directory'", null, null);
-		matEng.eval("load_buses_file",null,null); // This file should contain the buses consumption information for all the time spain of simulation
-		// In the one hereby used, the consumption variables are calles Pd and Qd (real and imaginary power demand)
-		matEng.eval("Steinkjer=mpc_case_file",null,null);
+		matEng.eval("cd 'C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer'", null, null);
+		matEng.eval("loadbuses",null,null);
+		matEng.eval("Steinkjer=SteinkjerModified",null,null);
 		matEng.eval("Steinkjer.gencost(1,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
 		matEng.eval("Steinkjer.gencost(2,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
-		matEng.eval("Steinkjer.bus(1:n_buses,3)=Pd(1:n_buses,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
-		matEng.eval("Steinkjer.bus(1:n_buses,4)=Qd(1:n_buses,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
-//		System.out.println("Estaba calculando para"+(((Variables.COUNTERMATLAB/15)-1)+769));
+		matEng.eval("Steinkjer.bus(1:974,3)=Pd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
+		matEng.eval("Steinkjer.bus(1:974,4)=Qd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
 		List <ChargingStation> cstations =(ChargingStationMap.getChargingStations());
-		System.out.println("Size is"+cstations.size());
 		for (int i=0;i<cstations.size();i++) {
 			if(cstations.get(i).getConnection()>0) {
 			String currentkw= Double.toString(cstations.get(i).getCurrentKW()/1000);
 			String connected=Integer.toString(cstations.get(i).getConnection());
 			matEng.eval("Steinkjer.bus("+connected+",3)=Steinkjer.bus("+connected+",3)+"+currentkw,null,null);
-			System.out.println("The station"+cstations.get(i).getID()+"is currently used to"+cstations.get(i).getCurrentKW()+"and connected to"+connected);
-		}
+					}
 		}
 		
 		matEng.eval("results=runopf(Steinkjer)",null,null);
@@ -115,11 +97,9 @@ public class Coord_matlab {
 		matEng.eval("losses_im=imag(sum(get_losses(results)))",null,null);
 		Variables.losses_real=matEng.getVariable("losses_r");
 		Variables.losses_imag=matEng.getVariable("losses_im");
-		System.out.println("matlab= "+Variables.losses_real+";"+Variables.losses_imag);
-//		System.out.println("losses_matlab = "+loss);
+
 		
 		List <ChargingStation> cstations2 =(ChargingStationMap.getChargingStations());
-		System.out.println("Size is"+cstations2.size());
 		for (int j=0;j<cstations.size();j++) {
 		if(cstations2.get(j).getConnection()>0) {
 			String bus=Integer.toString(cstations2.get(j).getConnection());
@@ -130,17 +110,12 @@ public class Coord_matlab {
 			Variables.voltage_angles[(cstations2.get(j).getID())-1]=matEng.getVariable("v_a");
 			matEng.eval("precio=results.bus("+bus+",14)",output,null);
 			double precio=matEng.getVariable("precio");
-			System.out.println("The price of station"+cstations2.get(j).getID()+"is"+precio);
 			double preciofinal= ((nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])])/80)+333.3*((precio-nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])])/(nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]));
 			if (preciofinal>10) {
 				preciofinal=10;
 			}
-			System.out.println("The nordpool price is"+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
-			System.out.println("The final price is"+preciofinal);
 			cstations2.get(j).setPriceCurrent(precio);
 			cstations2.get(j).setPriceConsumer(preciofinal);
-			System.out.println(cstations2.get(j).getOpenChargingPoints());
-			//System.out.println("The price of station"+cstations.get(i).getID()+"is"+output.toString());
 
 		}
 	}
