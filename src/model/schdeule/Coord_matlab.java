@@ -90,18 +90,14 @@ public class Coord_matlab {
 		StringWriter output = new StringWriter();
 		StringWriter output1 = new StringWriter();
 		StringWriter output2 = new StringWriter();
-//		System.out.println(GlobalClock.getTime()[0]);
-		//System.out.println(output.toString());
-		matEng.eval("cd 'C:\\Users\\manpe\\eclipse-workspace\\ABM-Steinkjer'", null, null);
-		matEng.eval("loadbuses",null,null);
-		matEng.eval("Steinkjer=SteinkjerModified",null,null);
-//		matEng.eval("Steinkjer.gencost(1,5)=nordpool_prices("+((GlobalClock.getTime()[0])+1)+")");
-//		matEng.eval("Steinkjer.gencost(2,5)=nordpool_prices("+((GlobalClock.getTime()[0])+1)+")");
+		matEng.eval("cd 'directory'", null, null);
+		matEng.eval("load_buses_file",null,null); // This file should contain the buses consumption information for all the time spain of simulation
+		// In the one hereby used, the consumption variables are calles Pd and Qd (real and imaginary power demand)
+		matEng.eval("Steinkjer=mpc_case_file",null,null);
 		matEng.eval("Steinkjer.gencost(1,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
 		matEng.eval("Steinkjer.gencost(2,5)="+nordpool_prices[(GlobalClock.getTime()[2])][(GlobalClock.getTime()[0])]);
-//		System.out.println(((Variables.COUNTERMATLAB/15)-1)+769);
-		matEng.eval("Steinkjer.bus(1:974,3)=Pd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
-		matEng.eval("Steinkjer.bus(1:974,4)=Qd(1:974,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
+		matEng.eval("Steinkjer.bus(1:n_buses,3)=Pd(1:n_buses,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
+		matEng.eval("Steinkjer.bus(1:n_buses,4)=Qd(1:n_buses,"+(((Variables.COUNTERMATLAB/15)-1)+769)+")",null,null);
 //		System.out.println("Estaba calculando para"+(((Variables.COUNTERMATLAB/15)-1)+769));
 		List <ChargingStation> cstations =(ChargingStationMap.getChargingStations());
 		System.out.println("Size is"+cstations.size());
@@ -148,9 +144,6 @@ public class Coord_matlab {
 
 		}
 	}
-//		matEng.eval("losses=sum(get_losses(results))",output,null);
-//		Variables.losses=matEng.getVariable("losses");
-			System.out.println("Estoy en matlab");
 			matEng.close();
 			Variables.needsmatlab=false;
 	}
